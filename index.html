@@ -65,7 +65,7 @@
         <input
           type="password"
           id="password"
-          placeholder="請輸入密碼(某🐟的生日)"
+          placeholder="請輸入密碼(密碼是「某🐟的生日」例如:0105)"
           class="input-btn border focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <button type="submit" class="input-btn bg-purple-600 text-white hover:bg-purple-700">
@@ -108,9 +108,10 @@
   <script>
     const correctPassword = '0112';
     const targetDate = new Date('2025-01-12T00:00:00'); // 設定生日時間
+    const lockDate = new Date('2025-01-13T00:00:00'); // 密碼禁用時間
     const allowedTime = 24 * 60 * 60 * 1000; // 24小時限制
     let startTime = null;
-
+  
     const countdownSection = document.getElementById('countdown-section');
     const countdownElement = document.getElementById('countdown');
     const passwordSection = document.getElementById('password-section');
@@ -119,12 +120,12 @@
     const passwordInput = document.getElementById('password');
     const passwordForm = document.getElementById('password-form');
     const particlesContainer = document.getElementById('particles-container');
-
+  
     // 倒數計時函數
     const updateCountdown = () => {
       const now = new Date();
       const timeRemaining = targetDate - now;
-
+  
       if (timeRemaining <= 0) {
         countdownSection.style.display = 'none'; // 隱藏倒數
         passwordSection.classList.remove('hidden'); // 顯示密碼輸入框
@@ -138,12 +139,19 @@
           .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       }
     };
-
+  
     // 處理密碼提交
     const handlePasswordSubmit = (e) => {
       e.preventDefault();
+      const now = new Date();
+  
+      if (now >= lockDate) {
+        passwordSection.innerHTML = `<p class="text-center text-red-600 font-semibold">密碼輸入功能已禁用！</p>`;
+        return;
+      }
+  
       const enteredPassword = passwordInput.value;
-
+  
       if (enteredPassword === correctPassword) {
         passwordSection.remove(); // 移除密碼輸入框
         messageSection.classList.remove('hidden'); // 顯示卡片
@@ -155,7 +163,7 @@
         }, 2000);
       }
     };
-
+  
     // 煙花效果
     const createParticles = () => {
       particlesContainer.innerHTML = '';
@@ -171,12 +179,13 @@
         particlesContainer.appendChild(particle);
       }
     };
-
+  
     // 每秒更新倒數計時
     setInterval(updateCountdown, 1000);
-
+  
     // 綁定表單提交事件
     passwordForm.addEventListener('submit', handlePasswordSubmit);
   </script>
+  
 </body>
 </html>
