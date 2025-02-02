@@ -3,177 +3,502 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>一個酷東西</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>一 個 酷 東 西</title>
+  <!-- 引入 Noto Sans TC 字體 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
+    /* 自定義 CSS 樣式 */
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Noto Sans TC', sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
     }
-    .animate-ping {
-      animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
+
     .animate-fade-in {
-      animation: fadeIn 2s ease-in;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 2s ease-in forwards;
     }
+
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+
+    .hidden-message {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      text-align: center;
+      color: #ff69b4;
+      opacity: 0;
+      animation: fadeIn 3s ease-in forwards, heartbeat 1.5s infinite;
+      cursor: pointer;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .hidden { display: none; }
+
     .input-btn {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
       font-size: 16px;
     }
-    .alert-error {
-      display: none;
-      background-color: #f56565;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
+
     .countdown {
       font-size: 1.5rem;
       color: #4a5568;
       font-weight: bold;
     }
+
+    .animate-bounce {
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    .heart {
+      position: fixed;
+      font-size: 24px;
+      color: #ff69b4;
+      animation: fall 5s linear infinite;
+      pointer-events: none;
+    }
+
+    .letter-container {
+      position: relative;
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+
+    .letter-container.open {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .letter-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      opacity: 0;
+    }
+
+    .letter-container.open .letter-content {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .letter-header {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: #ff69b4;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tooltip {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease-in forwards;
+    }
+
+    .confirmation-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      z-index: 1000;
+      max-width: 90%;
+      text-align: center;
+    }
+    
+    .dialog-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    
+    .dialog-button {
+      padding: 0.5rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .confirm-btn {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    .cancel-btn {
+      background: #f44336;
+      color: white;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+
+    @media (max-width: 768px) {
+      .text-2xl { font-size: 1.5rem; }
+      .text-3xl { font-size: 2rem; }
+    }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-r from-purple-100 to-pink-100 p-4">
+<body class="min-h-screen p-4">
+  <div id="loading" class="fixed inset-0 bg-white flex items-center justify-center">
+    <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
+  </div>
 
   <div class="max-w-full mx-auto bg-white rounded-xl shadow-lg p-6 relative overflow-hidden" id="birthday-card">
-    <div id="particles-container"></div>
-
     <div id="countdown-section" class="text-center">
       <h2 class="text-2xl font-semibold mb-4 text-purple-600">倒數計時中</h2>
       <p id="countdown" class="countdown">距離解鎖還有：--:--:--</p>
     </div>
-
     <div id="password-section" class="text-center hidden">
       <h2 class="text-2xl font-semibold mb-6 text-purple-600">請輸入密碼</h2>
       <form id="password-form" class="space-y-4">
-        <input
-          type="password"
-          id="password"
-          placeholder="請輸入密碼(提示「某人的生日」例如:0112)"
-          class="input-btn border focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-        <button type="submit" class="input-btn bg-purple-600 text-white hover:bg-purple-700">
-          確認
-        </button>
+        <input type="password" id="password" placeholder="請輸入密碼" class="border p-2 rounded w-full" />
+        <button type="submit" class="bg-purple-600 text-white p-2 rounded w-full animate-bounce">確認</button>
       </form>
     </div>
-
-    <div id="message-section" class="prose prose-purple max-w-none animate-fade-in hidden">
-        <h1 class="text-3xl font-bold text-center mb-8 text-purple-600">🎉 𝓗𝓪𝓹𝓹𝔂 𝓑𝓲𝓻𝓽𝓱𝓭𝓪𝔂！🎉</h1>
-        <div class="space-y-6 text-gray-700">
-        <p class="font-semibold text-fade fade-delay-1">給 zizza：</p>
-        <p class="text-fade fade-delay-2">先祝妳生日快樂！🎉</p>
-        
-        <p class="text-fade fade-delay-3">回想這幾年，每次看到妳又有不會的問題，都是一臉懵的樣子，雖然心裡想笑，但還是會幫妳找到答案。</p>
-        
-        <p class="text-fade fade-delay-4">然後每次幫妳解答完問題，看到妳很開心的樣子，我都會覺得特別有成就感。</p>
-        
-        <p class="text-fade fade-delay-5">也謝謝妳，謝謝妳在我生日時，雖然晚了一天，仍特地來對我說「生日快樂」。對妳來說，這或許只是一句簡單的話，但對我來說，卻是今年最特別的禮物。現在，輪到我來送妳祝福，這一次，我一定不會忘，也不會遲到，第一時間送上我的祝福。</p>
-        
-        <p class="text-fade fade-delay-6">今天是妳的生日，我不僅希望妳快樂，還希望未來的日子裡，妳能一直幸福自在，並與妳的男朋友繼續攜手走下去。等到畢業後，或許我們會各自奔向不同的方向，但我相信，妳一定能找到屬於自己的路。即使那時沒有人再幫妳寫作業，我也相信妳能獨立解決一切。</p>
-        
-        <p class="text-fade fade-delay-7">這是我第一次寫卡片給別人，應該也是最後一次寫給妳。下一次妳的生日，或許我們已經各自走上不同的道路，但我會一直記得，有一個像妳這樣的傻逼，曾在我的生命裡留下了深刻的痕跡。</p>
-        
-        <p class="text-fade fade-delay-8">最後，再次祝妳生日快樂呦！🎂</p>
-        
-        <p class="text-right font-semibold text-fade fade-delay-9">🔥</p>
-        </div>
-    </div>
-
-    <div id="error-alert" class="alert-error">
-      密碼錯誤，請重試！
-    </div>
+    <div id="message-section" class="prose prose-purple max-w-none animate-fade-in hidden"></div>
+    <div id="confession-section" class="prose prose-purple max-w-none animate-fade-in hidden"></div>
   </div>
 
+  <audio autoplay loop>
+    <source src="path/to/your/music.mp3" type="audio/mpeg">
+    您的瀏覽器不支持音頻元素。
+  </audio>
+
+  <button id="music-control" class="fixed bottom-4 right-4 bg-purple-600 text-white p-2 rounded-full">
+    <span id="music-icon">🎵</span>
+  </button>
+
+  <!-- 引入 EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
-    const correctPassword = '0112';
-    const targetDate = new Date('2025-01-12T00:00:00');
-    const lockDate = new Date('2025-01-13T00:00:00');
-    const allowedTime = 24 * 60 * 60 * 1000;
-    let startTime = null;
+    // 初始化 EmailJS
+    (function () {
+      emailjs.init('M8Xxa0MNcVmoZhRxP'); // 替換為你的 EmailJS 用戶 ID
+    })();
 
-    const countdownSection = document.getElementById('countdown-section');
-    const countdownElement = document.getElementById('countdown');
-    const passwordSection = document.getElementById('password-section');
-    const messageSection = document.getElementById('message-section');
-    const errorAlert = document.getElementById('error-alert');
-    const passwordInput = document.getElementById('password');
-    const passwordForm = document.getElementById('password-form');
-    const particlesContainer = document.getElementById('particles-container');
+    function decodeBase64(encoded) {
+      return atob(encoded);
+    }
 
-    const updateCountdown = () => {
-      const now = new Date();
-      const timeRemaining = targetDate - now;
+    function showCustomConfirm(message, callback) {
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      
+      const dialog = document.createElement('div');
+      dialog.className = 'confirmation-dialog';
+      dialog.innerHTML = `
+        <p class="text-lg font-semibold mb-4">${message}</p>
+        <input type="text" id="verification-code" placeholder="" class="border p-2 rounded w-full mb-4" />
+        <div class="dialog-buttons">
+          <button class="dialog-button confirm-btn">確定開啟</button>
+          <button class="dialog-button cancel-btn">暫時不要</button>
+        </div>
+        <p id="error-message" class="text-red-500 text-sm mt-2 hidden"></p>
+      `;
 
-      if (timeRemaining <= 0) {
-        countdownSection.style.display = 'none';
-        passwordSection.classList.remove('hidden');
-        startTime = now.getTime();
-      } else {
-        const hours = Math.floor((timeRemaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-        const minutes = Math.floor((timeRemaining % (60 * 60 * 1000)) / (60 * 1000));
-        const seconds = Math.floor((timeRemaining % (60 * 1000)) / 1000);
-        countdownElement.textContent = `距離解鎖還有：${hours.toString().padStart(2, '0')}:${minutes
-          .toString()
-          .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      const confirmBtn = dialog.querySelector('.confirm-btn');
+      const cancelBtn = dialog.querySelector('.cancel-btn');
+      const verificationInput = dialog.querySelector('#verification-code');
+      const errorMessage = dialog.querySelector('#error-message');
+
+      let errorCount = 0; // 每次重新整理時重置錯誤計數
+      const maxErrorCount = 3;
+
+      verificationInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^\u4e00-\u9fa5]/g, ''); // 只允許中文字符
+      });
+
+      const cleanup = () => {
+        document.body.removeChild(overlay);
+        document.body.removeChild(dialog);
+      };
+
+      confirmBtn.addEventListener('click', () => {
+        const verificationCode = verificationInput.value.trim();
+
+        if (errorCount >= maxErrorCount) {
+          errorMessage.textContent = '錯誤次數過多，請重新整理頁面後再試！';
+          errorMessage.classList.remove('hidden');
+          return;
+        }
+
+        if (verificationCode.length !== 3) {
+          errorMessage.textContent = '請輸入三個中文字！';
+          errorMessage.classList.remove('hidden');
+          errorCount++;
+          return;
+        }
+
+        if (verificationCode !== '陳昀澤') {
+          errorMessage.textContent = '名字錯誤，請重新輸入！';
+          errorMessage.classList.remove('hidden');
+          errorCount++;
+          return;
+        }
+
+        cleanup();
+        callback(true);
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        cleanup();
+        callback(false);
+      });
+
+      document.body.appendChild(overlay);
+      document.body.appendChild(dialog);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const correctPassword = decodeBase64('MDExMg=='); // 密碼：0112
+      const secretPassword = decodeBase64('SUxPVkVZ'); // 密碼：ILOVEY
+      const targetDate = new Date('2025-01-12T00:00:00'); // 解鎖日期
+      const unlockDate = new Date('2025-01-13T00:00:00'); // 彩蛋解鎖日期
+      const countdownElement = document.getElementById('countdown');
+      const countdownSection = document.getElementById('countdown-section');
+      const passwordSection = document.getElementById('password-section');
+      const messageSection = document.getElementById('message-section');
+      const passwordForm = document.getElementById('password-form');
+      const passwordInput = document.getElementById('password');
+      const loadingSection = document.getElementById('loading');
+      const confessionSection = document.getElementById('confession-section');
+
+      function createHearts() {
+        const heartContainer = document.createElement('div');
+        heartContainer.style.position = 'fixed';
+        heartContainer.style.top = '0';
+        heartContainer.style.left = '0';
+        heartContainer.style.width = '100%';
+        heartContainer.style.height = '100%';
+        heartContainer.style.pointerEvents = 'none';
+        document.body.appendChild(heartContainer);
+
+        for (let i = 0; i < 20; i++) {
+          const heart = document.createElement('div');
+          heart.innerHTML = '❤️';
+          heart.classList.add('heart');
+          heart.style.left = `${Math.random() * 100}%`;
+          heart.style.animationDelay = `${Math.random() * 5}s`;
+          heartContainer.appendChild(heart);
+        }
       }
-    };
 
-    const handlePasswordSubmit = (e) => {
-      e.preventDefault();
-      const now = new Date();
+      function updateCountdown() {
+        const now = new Date();
+        const timeRemaining = targetDate - now;
 
-      if (now >= lockDate) {
-        passwordSection.innerHTML = `<p class="text-center text-red-600 font-semibold">我以為妳不會再打開看了ㄟ(我有設定密碼有效時間)！</p>`;
-        return;
+        if (timeRemaining <= 0) {
+          countdownSection.style.display = 'none';
+          passwordSection.classList.remove('hidden');
+        } else {
+          const hours = Math.floor((timeRemaining / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((timeRemaining / (1000 * 60)) % 60);
+          const seconds = Math.floor((timeRemaining / 1000) % 60);
+          countdownElement.textContent = `距離解鎖還有：${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
       }
 
-      const enteredPassword = passwordInput.value;
+      passwordForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        try {
+          if (passwordInput.value === correctPassword) {
+            passwordSection.style.display = 'none';
+            messageSection.classList.remove('hidden');
+            messageSection.innerHTML = `
+              <h1 class="text-3xl font-bold text-center mb-8 text-purple-600">🎉 𝓗𝓪𝓹𝓹𝔂 𝓑𝓲𝓻𝓽𝓱𝓭𝓪𝔂！🎉</h1>
+              <div class="space-y-6 text-gray-700">
+                <p class="font-semibold text-fade fade-delay-1">給 zizza：</p>
+                <p class="text-fade fade-delay-2">先祝妳生日快樂！🎉</p>
+                <p class="text-fade fade-delay-3">回想這幾年，每次看到妳又有不會的問題，都是一臉懵的樣子，雖然心裡想笑，但還是會幫妳找到答案。</p>
+                <p class="text-fade fade-delay-4">然後每次幫妳解答完問題，看到妳很開心的樣子，我都會覺得特別有成就感。</p>
+                <p class="text-fade fade-delay-5">也謝謝妳，謝謝妳在我生日時，雖然晚了一天，仍特地來對我說「生日快樂」。<br>對妳來說，這或許只是一句簡單的話，但對我來說，卻是今年最特別的禮物。<br>現在，輪到我來送妳祝福，這一次，我一定不會忘，也不會遲到，第一時間送上我的祝福。</p>
+                <p class="text-fade fade-delay-6">今天是妳的生日，我不僅希望妳快樂，還希望未來的日子裡，妳能一直幸福自在，並與妳的男朋友繼續攜手走下去。<br>等到畢業後，或許我們會各自奔向不同的方向，但我相信，妳一定能找到屬於自己的路。<br>即使那時沒有人再幫妳寫作業，我也相信妳能獨立解決一切。</p>
+                <p class="text-fade fade-delay-7">這是我第一次寫卡片給別人，應該也是最後一次寫給妳。<br>下一次妳的生日，或許我們已經各自走上不同的道路，但我會永遠記得，有一個像妳這樣的傻逼，曾在我的生命裡留下了深刻的痕跡。</p>
+                <p class="text-fade fade-delay-8">最後，再次祝妳生日快樂！🎂</p>
+                <p class="text-right font-semibold text-fade fade-delay-9">🔥</p>
+              </div>
+              ${new Date() >= unlockDate ? '<div id="hidden-message" class="hidden-message">妳曾是我最在意的人 ❤️</div>' : ''}
+            `;
 
-      if (enteredPassword === correctPassword) {
-        passwordSection.remove();
-        messageSection.classList.remove('hidden');
-        createParticles();
-      } else {
-        errorAlert.style.display = 'block';
-        setTimeout(() => {
-          errorAlert.style.display = 'none';
-        }, 2000);
-      }
-    };
+            if (new Date() >= unlockDate) {
+              const hiddenMessage = document.getElementById('hidden-message');
+              hiddenMessage.addEventListener('click', function () {
+                showCustomConfirm('💖 這是一個特別的彩蛋！<br>⚠️ 內容包含隱藏訊息確定要查看嗎？<br>提示:請輸入妳覺得對妳最好的人是誰？（請輸入全名）', (confirmed) => {
+                  if (!confirmed) return;
 
-    const createParticles = () => {
-      particlesContainer.innerHTML = '';
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('absolute', 'animate-ping');
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        particle.style.width = `${Math.random() * 8 + 4}px`;
-        particle.style.height = `${Math.random() * 8 + 4}px`;
-        particle.style.backgroundColor = ['#FFD700', '#FFA500', '#FF69B4', '#00CED1'][Math.floor(Math.random() * 4)];
-        particle.style.borderRadius = '50%';
-        particlesContainer.appendChild(particle);
-      }
-    };
+                  confessionSection.classList.remove('hidden');
+                  showConfession();
+                  createHearts();
 
-    setInterval(updateCountdown, 1000);
+                  const tooltip = document.createElement('div');
+                  tooltip.classList.add('tooltip');
+                  tooltip.textContent = '點擊信封查看內容';
+                  document.body.appendChild(tooltip);
 
-    passwordForm.addEventListener('submit', handlePasswordSubmit);
+                  setTimeout(() => tooltip.remove(), 3000);
+                });
+              });
+            }
+          } else if (passwordInput.value === secretPassword) {
+            passwordSection.style.display = 'none';
+            confessionSection.classList.remove('hidden');
+            showConfession();
+            createHearts();
+
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.textContent = '點擊信封查看內容';
+            document.body.appendChild(tooltip);
+
+            setTimeout(() => tooltip.remove(), 3000);
+          } else {
+            throw new Error('密碼驗證失敗');
+          }
+        } catch (error) {
+          alert('系統忙碌中，請稍後再試');
+          console.error('系統錯誤:', error);
+        }
+      });
+
+      function showConfession() {
+      confessionSection.innerHTML = `
+        <div class="letter-container">
+          <div class="letter-header">💌 給妳的悄悄話 💌</div>
+          <div class="letter-content">
+            <p class="text-fade fade-delay-1">如果妳有看到這封信，我會非常開心，因為這代表妳願意花時間了解我的心意。<br>其實，有些話我一直藏在心裡，<br>因為我是俗辣，<br>所以我只敢在這告訴妳...</p>
+              <p class="text-fade fade-delay-2">我喜歡妳。</p>
+              <p class="text-fade fade-delay-3">不是因為妳的外表，也不是因為妳的內在，<br>而是因為妳獨一無二的智商(笨笨的)，<br>讓我激起一股想要保護妳的想法。</p>
+              <p class="text-fade fade-delay-4">我常常想像，如果我們能更靠近一點，</p>
+              <p class="text-fade fade-delay-5">我會用盡全力讓妳每天都感到幸福。<br>但我也明白，有些緣分或許只能停留在美好的回憶裡。</p>
+              <p class="text-fade fade-delay-6">如果當初我能更勇敢一點，或許我們的故事會不一樣吧？<br>無論未來如何，我都會默默守護妳，支持妳。<br>如果有一天妳需要我，<br>請記得我永遠在這裡，隨時願意為妳伸出雙手 (0979-370105)。</p>
+              <p class="text-fade fade-delay-7">祝妳生日快樂，願妳的每一天都充滿笑容與幸福。</p>
+              <p class="text-right font-semibold text-fade fade-delay-8">❤️</p>
+          </div>
+        </div>
+        <div id="question-section" class="mt-8 text-center hidden">
+          <p class="text-2xl font-semibold mb-4">如果時光能倒流，妳願意跟我在一起嗎？</p>
+          <div class="space-x-4">
+            <button id="yes-btn" class="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300">願意</button>
+            <button id="no-btn" class="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition duration-300">不願意</button>
+          </div>
+        </div>
+      `;
+
+      const letterContainer = document.querySelector('.letter-container');
+      const questionSection = document.getElementById('question-section');
+
+      letterContainer.addEventListener('click', function () {
+        this.classList.toggle('open');
+        if (this.classList.contains('open')) {
+          // 延遲 1 秒後顯示問題
+          setTimeout(() => {
+            questionSection.classList.remove('hidden');
+          }, 10000); // 延遲時間可調整 (單位：毫秒)
+        } else {
+          questionSection.classList.add('hidden');
+        }
+      });
+
+      // 按鈕點擊事件保持不變
+      const yesBtn = document.getElementById('yes-btn');
+      const noBtn = document.getElementById('no-btn');
+
+      yesBtn.addEventListener('click', () => {
+        emailjs.send('service_uwrydxg', 'template_sknrdaw', { answer: '願意' })
+          .then(() => {
+            alert('謝謝妳！我會好好珍惜這個機會！❤️');
+          })
+          .catch((error) => {
+            console.error('發送郵件失敗:', error);
+          });
+      });
+
+      noBtn.addEventListener('click', () => {
+        emailjs.send('service_uwrydxg', 'template_sknrdaw', { answer: '不願意' })
+          .then(() => {
+            alert('沒關係，我會繼續默默守護妳！😊');
+          })
+          .catch((error) => {
+            console.error('發送郵件失敗:', error);
+          });
+      });
+    }
+
+      window.addEventListener('load', function () {
+        loadingSection.style.display = 'none';
+      });
+
+      setInterval(updateCountdown, 1000);
+
+      const audio = document.querySelector('audio');
+      const musicControl = document.getElementById('music-control');
+      const musicIcon = document.getElementById('music-icon');
+
+      musicControl.addEventListener('click', function () {
+        if (audio.paused) {
+          audio.play();
+          musicIcon.textContent = '🎵';
+        } else {
+          audio.pause();
+          musicIcon.textContent = '🔇';
+        }
+      });
+    });
   </script>
-  
 </body>
 </html>
